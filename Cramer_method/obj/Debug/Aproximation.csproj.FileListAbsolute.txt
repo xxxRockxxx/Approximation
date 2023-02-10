@@ -1,0 +1,7 @@
+C:\Програмирование\Saves programs\C#\Aproximation\obj\Debug\Aproximation.csproj.AssemblyReference.cache
+C:\Програмирование\Saves programs\C#\Aproximation\obj\Debug\Aproximation.csproj.CoreCompileInputs.cache
+C:\Програмирование\Saves programs\C#\Aproximation\bin\Debug\Aproximation.exe.config
+C:\Програмирование\Saves programs\C#\Aproximation\bin\Debug\Aproximation.exe
+C:\Програмирование\Saves programs\C#\Aproximation\bin\Debug\Aproximation.pdb
+C:\Програмирование\Saves programs\C#\Aproximation\obj\Debug\Aproximation.exe
+C:\Програмирование\Saves programs\C#\Aproximation\obj\Debug\Aproximation.pdb

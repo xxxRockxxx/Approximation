@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cramer_method
+namespace Aproximation
 {
     internal class Converter
     {

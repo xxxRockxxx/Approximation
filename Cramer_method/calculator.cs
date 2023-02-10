@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cramer_method
+namespace Aproximation
 {
     internal class calculator
     {
@@ -35,7 +35,7 @@ namespace Cramer_method
             int forY_1 = 0;
             double sumX = 0;
             double sumY = 0;
-            _NumbersForFunction = new double[X.Length];
+            _NumbersForFunction = new double[Degree+1];
             _Function_numbers = new double[Degree];
             _DegreeOfFunc = Degree;
             CountX = X.Length;
@@ -50,7 +50,6 @@ namespace Cramer_method
                     SumToDegree += 3;
                     i++;
                 }
-                _Calculation_Table = new double[4 + SumToDegree, X.Length + 1];
                 _TestsMatrix = new double[4 + SumToDegree, 1];
 
                 //Test
@@ -68,112 +67,57 @@ namespace Cramer_method
 
             else
             {
-                _Calculation_Table = new double[4, X.Length + 1];
                 _TestsMatrix = new double[4, 1];
                 _TestMatrixForX = new double[_DegreeOfFunc, 1];
                 _TestMatrixForY = new double[_DegreeOfFunc, 1];
             }
 
-            foreach (var x in X)
+            int numberX = 0;
+            int DegreeX = 1;
+            int indexForX = 0;
+
+            while (numberX != _TestMatrixForX.GetLength(0))
             {
-                _DataXandY[forX, forX_1] = double.Parse(x);
-                _Calculation_Table[forX, forX_1] = double.Parse(x);
-                forX_1++;
-                sumX += double.Parse(x);
-
-            }
-
-            foreach (var y in Y)
-            {
-                _DataXandY[forY, forY_1] = double.Parse(y);
-                _Calculation_Table[forY, forY_1] = double.Parse(y);
-                forY_1++;
-                sumY += double.Parse(y);
-
-            }
-            _Calculation_Table[forX, forX_1] = sumX;
-            _Calculation_Table[forY, forY_1] = sumY;
-            _TestsMatrix[forX, 0] = sumX;
-            _TestsMatrix[forY, 0] = sumY;
-            //Test
-            _TestMatrixForX[0, 0] = sumX;
-            _TestMatrixForY[0, 0] = sumY;
-            //
-            Count();
-        }
-        //Заполнение матрицы для дальнейшего  решения СЛАУ
-        private static void Count()
-        {
-            int height = _Calculation_Table.GetLength(0);
-            int width = _Calculation_Table.GetLength(1);
-            int Degree_of_Number = 1;
-            double sum = 0;
-            bool work = true;
-            int x = 0;
-            int y = 0;
-            //Test
-            int CountX = 1;
-            int CountY = 1;
-            //
-
-            for (int i = 2; i < height; i++)
-            {
-                if (i >= 2)
+                sumX = 0;
+                foreach (var x in X)
                 {
-                    Degree_of_Number++;
+                    sumX += Math.Pow(double.Parse(x), DegreeX);
                 }
+                _TestMatrixForX[indexForX, 0] = sumX;
+                indexForX++;
+                DegreeX++;
+                numberX++;
+            }
+            int numberY = 0;
+            int DegreeY = 0;
+            int indexForY = 0;
 
-                for (int j = 0; j < width; j++)
+            while (numberY != Degree)
+            {
+                sumY = 0;
+                if (numberY == 0)
                 {
-                    if (j < _DataXandY.GetLength(1) & work)
+                    foreach (var y in Y)
                     {
-                        _Calculation_Table[i, j] = Math.Pow(_DataXandY[x, j], Degree_of_Number);
-                        sum += Math.Pow(_DataXandY[x, j], Degree_of_Number);
-
-
-                        if (Degree_of_Number == _DegreeOfFunc + 1 & j + 1 == _DataXandY.GetLength(1))
-                        {
-                            work = false;
-                            Degree_of_Number = 0;
-                        }
-                    }
-
-                    else if (j == _DataXandY.GetLength(1))
-                    {
-                        _Calculation_Table[i, j] = sum;
-                        _TestsMatrix[i, 0] = sum;
-                        //Test
-                        if (work != false || Degree_of_Number == 0)
-                        {
-                            _TestMatrixForX[CountX, 0] = sum;
-                            CountX++;
-                        }
-
-                        else if (work == false)
-                        {
-                            _TestMatrixForY[CountY, 0] = sum;
-                            CountY++;
-                        }
-                        //
-                        sum = 0;
-
-                        if (x == _DataXandY.GetLength(1))
-                        {
-                            x = 0;
-                        }
-                    }
-
-                    else if (i >= _DegreeOfFunc + 1 & j != _DataXandY.GetLength(1))
-                    {
-                        _Calculation_Table[i, j] = (Math.Pow(_DataXandY[y, x], Degree_of_Number) * _DataXandY[y + 1, x]);
-                        sum += (Math.Pow(_DataXandY[y, x], Degree_of_Number) * _DataXandY[y + 1, x]);
-                        x++;
+                        sumY += double.Parse(y);
                     }
                 }
 
+                else
+                {
+                    for (int i = 0; i < Y.Length; i++)
+                    {
+                        sumY += Math.Pow(double.Parse(X[i]), DegreeY) * double.Parse(Y[i]);
+                    }
+                }
+                _TestMatrixForY[indexForY, 0] = sumY;
+                indexForY++;
+                numberY++;
+                DegreeY++;
             }
-            SLAE_Solution();
+            SLAE_Solution ();
         }
+        
         //Сделать матрицу для икса и игрика отдельно. Должно упрстить поиск и выбор данных для постановки задачи.
         private static void SLAE_Solution()
         {
@@ -289,7 +233,7 @@ namespace Cramer_method
                                 if (_ForX == j)
                                 {
                                     TableForSolution[i, j] = _TestMatrixForY[CoordinateForY, 0];
-                                    if (_ForX == 1)//Костыль
+                                    if (_ForX == 1)
                                     {
                                         CoordinateForX--;
                                     }
@@ -321,13 +265,26 @@ namespace Cramer_method
 
                 //Расчетный модуль для нахождения коэфф. функции.
                 int CountCalculator = 0;
-                int p = 0;
+                
                 _equal = 0;
                 int q = 0;
-                int t = 0;
                 int z = 0;
+                int p;
+                int t;
                 bool wr = true;
-                while (CountCalculator != TableForSolution.GetLength(1) + 1)
+                if (_DegreeOfFunc == 2)
+                {
+                    p = 0;
+                    t = 1;
+                }
+
+                else
+                {
+                    p = 1;
+                    t = 0;
+                }
+
+                while (CountCalculator != TableForSolution.GetLength(1) + p)
                 {
                     if (q < _DegreeOfFunc)
                     {
@@ -384,6 +341,6 @@ namespace Cramer_method
                 mn++;
             }
 
-        }
+          }
     }
 }
